@@ -1,0 +1,312 @@
+<isdecorate template="application/MenuFrame"> <iscontent
+	type="text/html" charset="UTF-8" /> <isinclude template="inc/Modules" />
+<isset name="instanceType"
+	value="${require('dw/system/System').instanceType === 2 ? 'live' : 'test'}"
+	scope="page" /> 
+	
+	<isset name="getAllProductsMain"
+	value="${URLUtils.url('P360-AllProducts', 'localeSelected', pdict.localeSelected)}"
+	scope="PAGE" />
+	
+	<isset name="prefs"
+	value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', 'p360-menu-item')}"
+	scope="PAGE" /> 
+	<ISBreadcrumb name1="P360" url1="${prefs}" name2="${Resource.msg('label.p360.getallproduct','p360',null)}" url2="${getAllProductsMain}"
+	name3="Add Images" />
+<link rel="stylesheet" type="text/css"
+	href="${URLUtils.absStatic('/css/p360.css')}">
+<script src="${URLUtils.absStatic('/js/jquery.validate.js')}"
+	type="text/javascript"></script> <script
+	src="${URLUtils.absStatic('/js/additional-methods.min.js')}"
+	type="text/javascript"></script>
+	
+<div class="table_title aldi">Add 360 Images - ${pdict.productID}</div>
+<h1>${pdict.product.name}</h1>
+<isif condition="${pdict.product.variant}">
+	<font size="2px;">[
+		<isloop iterator="${pdict.product.variationModel.productVariationAttributes}" alias="attribute">
+			<isscript>
+				var variationValue = pdict.product.variationModel.getVariationValue(pdict.product,attribute);
+			</isscript>
+			<isif condition="${variationValue != null}"> 
+					<span style="text-transform: uppercase"><strong>${attribute.displayName}:</strong> ${variationValue.displayValue}</span>
+			</isif>
+		</isloop>
+	]</font>
+</isif>
+
+<isif condition="${pdict.message != null}">
+<div class="aldi">
+	<table border="0" cellspacing="0" cellpadding="4" width="100%"
+		class="error_box w e s">
+		<tbody>
+			<tr valign="top">
+				<td class="information_icon top e"><img
+					src="/on/demandware.static/Sites-Site/-/default/vdc272a6af00a8fb0670049af01a0d6993c47d39c/images/${pdict.type}.gif"
+					width="16" height="15" alt="" border="0"></td>
+				<td width="100%" class="${pdict.type}">${pdict.message}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<iselse></isif>
+<form action="${URLUtils.url('P360-addImages')}"
+	enctype="multipart/form-data" method="POST" id="addImages">
+	<input type="hidden" name="productID" id="productID" value=${pdict.productID}>
+	<input type="hidden" name="localeSelected" id="localeSelected" value=${pdict.localeSelected}>
+</form>
+<form action="${URLUtils.url('P360-uploadImages')}"
+	enctype="multipart/form-data" method="POST" id="uploadImages">
+	<table cellpadding="10" cellspacing="0" border="0" width="100%"
+		class="w e s">
+		<tbody>
+			<tr class="table_header aldi">
+				<td >Upload 360 Images</td>
+				<td >
+						<div style="float:right">
+							${Resource.msg('label.p360.selectlanguage','p360',null)}:
+							<isset name="localeSelected" value="${pdict.localeSelected}" scope="page">
+							<select name="LocaleID" id="LocaleID" class="dropdown inputfield_en">
+								<option value="default" selected>Default</option>
+								<isloop iterator = "${pdict.locales}" alias = "locale">
+										<isif condition="${locale.localeID == localeSelected}"> 
+											<option value="${locale.localeID}" selected>${locale.localeName}</option>
+										<iselse>
+											<option value="${locale.localeID}">${locale.localeName}</option>
+										</isif>							
+								</isloop>
+							</select>
+						</div>
+					</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<table cellpadding="0" cellspacing="0" border="0" width="95%"
+						class="">
+						<tbody>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							
+							<tr>
+								<td>&nbsp;</td>
+								<td colspan="2">
+									<input type="radio" name="imagePath" value="local" checked="checked" required />&nbsp;&nbsp;<lable>Local</lable>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" name="imagePath" value="remote" required />&nbsp;&nbsp;<lable>Remote</lable>
+								</td>
+							</tr>
+							
+							
+							<tr id="localDiv">
+								<td class="fielditem2" align="right">${Resource.msg('label.p360.addlocal360images','p360',null)}:<span
+									class="star">*</span></td>
+								<td colspan="2"><input type="File" multiple name="p360Image"
+									id="p360Image" value="" size="80" class="inputfield_en w100"
+									accept=".jpg, png">
+									</td>
+							</tr>
+							
+							<tr id="remoteDiv" style="display:none;">
+								<td class="fielditem2" align="right">${Resource.msg('label.p360.addremote360images','p360',null)}:<span
+									class="star">*</span></td>
+								<td colspan="2"><textarea  name="p360RemoteImage"
+									id="p360RemoteImage"  class="inputfield_en w100" rows="6" cols="50"></textarea>
+									<input type="hidden" name="p360RemoteImage_hidden" id="p360RemoteImage_hidden" value="">
+									<div class="remoteNotification">
+									<p>Please enter full qualified path, https://www.domain.com/images/001.jpg
+									<br>
+									To add multiple images, enter address in separate line <span id="remoteExampleHandle"><strong>example</strong></span>
+									 </p>
+									 <div class="remoteUrlExample" id="remoteUrlExample">
+									 <p>
+									 https://www.domain.com/images/001.jpg<br>
+									 https://www.domain.com/images/002.jpg<br>
+									 https://www.domain.com/images/003.jpg<br>
+									 https://www.domain.com/images/004.jpg<br>
+									 https://www.domain.com/images/005.jpg<br>
+									 </p>
+									 </div>
+									</div>
+									</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td colspan="2">&nbsp; <isif
+										condition=${pdict.fileProcessed}>
+									<div id="msgBox" class="bc_success">
+										${pdict.fileProcessed}</div>
+									</isif>
+									<div class="error"></div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="table_header aldi" colspan="2" style="text-align:right">
+				<input type="hidden" name="productIDHidden" id="productIDHidden" value=${pdict.productID}>
+				<input type="hidden" name="localeSelected" id="localeSelected" value=${pdict.localeSelected}>
+					<button type="button" id="uploadImagesSubmit" class="btn btn-primary">${Resource.msg('label.p360.submit','p360',null)}</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<isscript>
+	parsedP360Images = JSON.parse(pdict.productObj);
+	let preferences = require('~/cartridge/scripts/preferences/p360Preferences');
+	let Helper = require('~/cartridge/scripts/helpers/p360Helper');
+	var p360Preferences = preferences.getP360Preferences();
+	var currentSite = preferences.getCurrentSiteID();
+	var p360Dir = preferences.getFolderName();
+	var path = currentSite+'/'+p360Dir+"/"+pdict.productID+"/";
+	var basePath = Helper.generateBasePath(path);
+	var autoRotate;
+	if (pdict.product.custom.P360AutoRotateIntervalProduct !== null) {
+		autoRotate = pdict.product.custom.P360AutoRotateIntervalProduct;
+	} else {
+		autoRotate = p360Preferences.P360AutoRotateInterval;
+	}
+	
+</isscript>
+<isif condition="${parsedP360Images['p360'].length > 0}">
+<table cellpadding="20" cellspacing="0" border="0" width="100%" class="w e s">
+		<tbody>
+		<tr>
+			<td>
+				<div class="table_title aldi">Uploaded Images - ${pdict.productID}</div>
+			</td>
+		</tr>
+		<isif condition = ${pdict.p360Publish != true}>
+			<tr>
+				<td>
+					<div class="alert alert-info" role="alert">
+					<strong>${Resource.msg('label.p360.publishWarningHeading','p360',null)}: </strong>
+						${Resource.msg('label.p360.publishWarning','p360',null)}
+					</div>
+				</td>
+			</tr>		
+		</isif>
+		<tr>
+			<td>
+			<div class="controlbar">
+				<div class="controlbarItems">
+					Total Images: ${parsedP360Images['p360'].length.toString();} 
+				</div>
+				<div class="controlbarItems">
+					<button type="button" id="selectAll" class="btn btn-primary" value='Select All'>Select All</button>
+				</div>
+				<div class="controlbarItems">
+					<form action="${URLUtils.url('P360-removeSelectedImages')}" method="POST" id="removeSelectedImages">
+						<button type="button" id="remove_selected" class="btn btn-danger">Remove Images</button>
+						<input type="hidden" id="selectedImagesArray_hidden" name="selectedImagesArray_hidden" value="">
+				 		<input type="hidden" name="productID" id="productID" value="${pdict.productID}">
+		          		<input type="hidden" name="localeSelected" id="localeSelected" value="${pdict.localeSelected}">        
+		        	</form>
+	        	</div>
+	        	
+	        	<div class="controlbarItems" style="float:right">
+	        	<form action="${URLUtils.url('P360-autoInterval')}">
+					<label for="P360AutoIntervalProduct">Auto Rotation Interval:</label>
+					<input type="number" id="P360AutoRotateIntervalProduct" name="P360AutoRotateIntervalProduct" size="5" min="1" max="900" class="numberfield" value="${autoRotate}">
+					<button type="button" id="fscreen" class="btn btn-primary fullscreenbtn">Preview</button>
+					<input type="hidden" name="productIDHidden" id="productIDHidden" value=${pdict.productID}>
+					<input class="btn btn-info" type="submit">
+				</form>
+	        		        	
+	        	<isif condition = ${pdict.p360Publish == true}>
+					 <a href="${URLUtils.url('P360-publishStatus','productID',pdict.productID, 'status', 'false' )}" class="btn btn-danger">Unpublish</a>
+				<iselse>
+					 <a href="${URLUtils.url('P360-publishStatus','productID',pdict.productID, 'status', 'true' )}" class="btn btn-success">Publish</a> 
+				</isif>
+	        	
+	        	</div>
+			</div>
+			<div class="sortWarning">
+				<div class="alert alert-warning" role="alert">
+					<strong>${Resource.msg('label.p360.sortWarningHeading','p360',null)}: </strong>
+						${Resource.msg('label.p360.sortWarning','p360',null)}
+					</div>
+			</div>
+			
+		<ul class="P360images-list" id="P360images-list">
+			<isloop iterator="${parsedP360Images['p360']}" var="p360Image" status="loopStatus">
+			<isscript>
+			var imageUrl = Helper.generatePublicFilePath(p360Image, path);
+			</isscript>
+		<li class="P360images-list-item">
+			<div class="imageholder">
+				<img src="${imageUrl}">
+			</div>
+            <span class="P360images-name">
+	            <strong><span>${loopStatus.count}</span>.</strong> 
+	            <span class="title" id="title[]"><isprint value="${p360Image}"></span>
+            </span>
+            
+            <span class-"P360images-options">
+            <div class="left">
+            	<span class="dragicon"></span>
+            </div>
+            <div class="right">
+            	<input class="selectImage" id="${p360Image}" name="selectImage" type="checkbox" value="${p360Image}">
+            	
+            	<a href="${URLUtils.url('P360-removeImage', 'productID',pdict.productID, 'image', p360Image, 'localeSelected', pdict.localeSelected)}"
+										class="table_detail_link"
+										onclick="return window.confirm('Are you sure you want to remove image?')">${Resource.msg('label.p360.removeimage','p360',null)}</a>
+            	
+            	
+            	
+            </div>
+            
+            </span>
+            
+        </li>
+          
+		</isloop>
+		 </ul> 
+		
+        
+        
+        <br>
+        <div class="text-center" style="text-align:right;">
+        <form action="${URLUtils.url('P360-updateImages')}" method="POST" id="updateimages">
+          <input type="hidden" name="productID" id="productID" value="${pdict.productID}">
+          <input type="hidden" name="localeSelected" id="localeSelected" value="${pdict.localeSelected}">
+          <input type="hidden" name="p360ImageObj" id="p360ImageObj" value="">
+          <button type="button" id="saveimages" class="btn btn-primary">Save</button>
+         </form> 
+        </div>
+      </div>
+		<hr />
+		
+		
+			</td>
+		</tr>
+		
+		
+		</tbody>
+</table>
+<iselse>
+	<div id="P360images-list"></div>		
+</isif>	
+
+
+
+<div class="p360init">
+	<div id="p360"></div>
+</div>
+<input id="p360Images" name="p360Images" type="hidden" value="${JSON.stringify(parsedP360Images['p360'])}">
+<input id="p360Preferences" name="p360Preferences" type="hidden" value="${JSON.stringify(p360Preferences)}">
+<script defer type="text/javascript" src="${URLUtils.staticURL('/js/p360.js')}"></script>
+<script type="text/javascript"> var imageDir = "<isprint encoding="jsblock" value="${basePath} "/>";</script>
+<script type="text/javascript"> var length = "<isprint value="${parsedP360Images['p360'].length} "/>";</script>
+<script  defer type="text/javascript" src="${URLUtils.staticURL('/js/p360init.js')}"></script>
+<link rel="stylesheet" type="text/css" href="${URLUtils.staticURL('/css/p360.css')}"/>
+<script
+	src="${URLUtils.absStatic('/js/Sortable.js')}" type="text/javascript"></script>
+	
+<script defer
+	src="${URLUtils.absStatic('/js/addimages.js')}" type="text/javascript"></script>
+</isdecorate>

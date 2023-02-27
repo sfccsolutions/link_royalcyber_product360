@@ -1,0 +1,59 @@
+<div id="pdpCarousel-${product.id}" class="carousel slide" data-interval="0" data-prev="${Resource.msg('button.previous', 'common', null)}" data-next="${Resource.msg('button.next', 'common', null)}">
+	    <isif condition="${product.images['large'].length > 1}">
+	        <ol class="carousel-indicators" aria-hidden="true">
+	            <isloop items="${product.images['large']}" var="image" status="loopStatus">
+	                <li data-target="${"#"}pdpCarousel-${product.id}" data-slide-to="${loopStatus.index}" class='<isif condition="${loopStatus.index == 0}">active</isif>'>
+	                </li>
+	                <isset name="currentIndexSlide" value="${loopStatus.index + 1}" scope="page" />
+	            </isloop>
+	        </ol>
+	    </isif>
+	    <div class="carousel-inner" role="listbox">
+					<isif condition="${product.p360Enabled && product.P360Publish}">
+						<isif condition="${product.P360Images && pdict.p360Object.p360Data}">	
+						<div class='carousel-item active'>
+						<div class="p360init">	
+							<div id="p360">
+								<ul class="rotate-links">
+    							<li><a href="#" class="rotate-left"></a></li>
+    							<li><a href="#" class="rotate-right"></a></li>
+    							<li><a id="tb360Zoom" class="zoomin_button" title="Zoom in / out" style="cursor: e-resize;"></a></li>
+    							<li><a href="#" class="autospin"></a></li>
+    							<li><a href="#" id="fscreen" class="fullscreenbtn"></a></li>
+    						</ul>
+    						<div class="drag-to-spin"></div>
+							</div>
+						 </div>
+						</div> 	
+						</isif>
+					</isif>
+	        <isloop items="${product.images['large']}" var="image" status="loopStatus">
+	            <isif condition="${product.p360Enabled && product.P360Publish}">
+	            <div class='carousel-item <isif condition="${product.P360Images == null && loopStatus.index == 0}">active</isif>'>
+	            <iselse>
+	            <div class='carousel-item <isif condition="${loopStatus.index == 0}">active</isif>'>
+	            </isif>
+	            <img src="${image.url}" class="d-block img-fluid" alt="${image.alt} image number ${image.index}" itemprop="image" />
+	            </div>
+	            <isset name="currentIndexImg" value="${loopStatus.index + 1}" scope="page" />
+	        </isloop>
+	    </div>
+	    <isif condition="${product.images['large'].length > 1}">
+	        <a class="carousel-control-prev" href="${"#"}pdpCarousel-${product.id}" role="button" data-slide="prev">
+	            <span class="fa icon-prev" aria-hidden="true"></span>
+	            <span class="sr-only">${Resource.msg('button.previous', 'common', null)}</span>
+	        </a>
+	        <a class="carousel-control-next" href="${"#"}pdpCarousel-${product.id}" role="button" data-slide="next">
+	            <span class="fa icon-next" aria-hidden="true"></span>
+	            <span class="sr-only">${Resource.msg('button.next', 'common', null)}</span>
+	        </a>
+	    </isif>
+</div>
+<input id="p360Images" name="p360Images" type="hidden" value="${pdict.p360Object.pref}">
+<input id="p360Preferences" name="p360Preferences" type="hidden" value="${JSON.stringify(pdict.p360Object.p360Preferences)}">
+<script defer type="text/javascript" src="${URLUtils.staticURL('/js/p360.js')}"></script>
+<script type="text/javascript"> var imageDir = "<isprint encoding="jsblock" value="${product.basePath} "/>";</script>
+<script type="text/javascript"> var length = "<isprint value="${pdict.p360Object.P360Images['p360'].length} "/>";</script>
+<script type="text/javascript"> var autoRotateInterval = "<isprint value="${pdict.p360Object.P360AutoRotateIntervalProduct} "/>";</script>
+<script defer type="text/javascript" src="${URLUtils.staticURL('/js/p360init.js')}"></script>
+<link rel="stylesheet" type="text/css" href="${URLUtils.staticURL('/css/p360.css')}"/>

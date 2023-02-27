@@ -1,0 +1,7 @@
+cartridges/int_royalcyber_product360/cartridge/static/
+cartridges/bm_royalcyber_product360/cartridge/static/
+coverage/
+doc/
+bin/
+codecept.conf.js
+webpack.config

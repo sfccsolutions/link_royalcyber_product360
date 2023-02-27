@@ -1,0 +1,248 @@
+<isdecorate template="application/MenuFrame"> <iscontent
+	type="text/html" charset="UTF-8" /> <isinclude template="inc/Modules" />
+<isset name="instanceType"
+	value="${require('dw/system/System').instanceType === 2 ? 'live' : 'test'}"
+	scope="page" /> <isset name="prefs"
+	value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', 'p360-menu-item')}"
+	scope="PAGE" /> 
+
+<isset name="getAllProductsMain"
+	value="${URLUtils.url('P360-AllProducts', 'localeSelected', pdict.localeSelected)}"
+	scope="PAGE" />
+
+	
+<ISBreadcrumb name1="P360" url1="${prefs}"
+	name2="${Resource.msg('label.p360.getallproduct','p360',null)}" />
+
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="${URLUtils.absStatic('/css/getproducts.css')}">
+	
+<link rel="stylesheet" type="text/css"
+	href="${URLUtils.absStatic('/css/p360.css')}">
+
+<div class="table_title aldi">${Resource.msg('label.p360.getallproduct','p360',null)}</div>
+
+<input type="hidden" name="productTypeSelectedHidden" id="productTypeSelectedHidden" value="${pdict.productType}">
+<table border="0" cellpadding="0" cellspacing="0" width="100%"
+	style="margin: 0 40px 0 0;">
+	<tbody>
+		<tr>
+			<td class="w s e"><img
+				src="/on/demandware.static/Sites-Site/-/default/vdc272a6af00a8fb0670049af01a0d6993c47d39c/images/space.gif"
+				width="1" height="2" alt="" border="0"></td>
+		</tr>
+	</tbody>
+</table>
+<p>&nbsp</p>
+<!--      <isset name="product" value="${pdict.transformProducts}" scope="PAGE"/>  -->
+<isscript>
+	var parsedP360Images;
+	var Helper = require('~/cartridge/scripts/helpers/p360Helper');
+	var preferences = require('~/cartridge/scripts/preferences/p360Preferences');
+	var URLUtils = require('dw/web/URLUtils');
+</isscript>
+<div class="aldi">
+	<!--  search Table start  -->
+	<div id="SimpleDiv" style="display: block;">
+		<table cellspacing="0" cellpadding="4" width="100%" class="infobox">
+			<tbody>
+			<form id="getProducts" action="${URLUtils.url('P360-getAllProducts')}" method="post">
+				<tr>
+					<td class="infobox_title_search" colspan="3" nowrap="nowrap">${Resource.msg('label.p360.productsearch','p360',null)}</td>
+					<td align="right" nowrap="nowrap" class="infobox_item_search">
+						
+							<input type="hidden" name="productType" id="productType" value="${pdict.productType}">
+							<input type="hidden" name="localeSelected" id="localeSelected" value="${pdict.localeSelected}">
+							<input type="hidden" name="getVariantsOf" id="getVariantsOf" value="${pdict.getVariantsOf}">
+						
+					</td>
+				</tr>
+				<tr>
+					
+					<td  class="infobox_item" style="padding: 0 4px 0 4px;"
+										nowrap="nowrap" colspan="3">${Resource.msg('label.p360.productid','p360',null)}:
+									<input type="hidden"
+										name="DefaultButton" value="findSimple"> <input
+										type="text" name="search" id="searchKey" value="${pdict.searchParam}"
+										maxlength="255" size="35"
+										class="inputfield_en perm_not_disabled"> <input type="hidden" name="productID" id="productID"
+										value="${pdict.productID}">
+										<button id ="findSimpleAllProducts" name="findSimpleAllProducts" class="button perm_not_disabled">${Resource.msg('label.p360.find','p360',null)}</button>
+									</td>
+					
+					<td >
+						<div style="float:right">
+							${Resource.msg('label.p360.selectlanguage','p360',null)}:
+							<isset name="localeSelected" value="${pdict.localeSelected}" scope="page">
+							<select name="LocaleID" id="LocaleID" class="dropdown inputfield_en">
+								<option value="default" selected>Default</option>
+								<isloop iterator = "${pdict.locales}" alias = "locale">
+										<isif condition="${locale.localeID == localeSelected}"> 
+											<option value="${locale.localeID}" selected>${locale.localeName}</option>
+										<iselse>
+											<option value="${locale.localeID}">${locale.localeName}</option>
+										</isif>							
+								</isloop>
+							</select>
+						</div>
+					</td>
+				</tr>
+				</form>
+			</tbody>
+		</table>
+	</div>
+	<!--  search Table end -->
+	<table class="producttable display" id="producttable1" width="100%"
+		cellspacing="0" cellpadding="10">
+		<!--- header --->
+		<thead>
+			<tr>
+				<th class="table_header center w e s">${Resource.msg('label.p360.productdetail','p360',null)}</th>
+				<th class="table_header center w e s">${Resource.msg('label.p360.images','p360',null)}</th>
+				<th class="table_header center w e s">${Resource.msg('label.p360.producttype','p360',null)}</th>
+				<th class="table_header center w e s">${Resource.msg('label.p360.options','p360',null)}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<isset name="prev_page" value="allProducts" scope="PAGE"  />
+			<isloop iterator="${pdict.transformProducts}" alias="product">
+			<tr>
+				<td class="table_detail middle e s" nowrap="nowrap" width="25%">
+					<strong><isprint value="${product.ID}"></strong>
+					<br>
+						<isprint value="${product.name}">
+					<br/>
+					<isif condition="${product.variant}">
+						<font size="-2">[
+							<isloop iterator="${product.variationModel.productVariationAttributes}" alias="attribute">
+								<isscript>
+									var variationValue = product.variationModel.getVariationValue(product,attribute);
+								</isscript>
+								<isif condition="${variationValue != null}"> 
+										${attribute.displayName}:${variationValue.displayValue}
+								</isif>
+							</isloop>
+						]</font>
+					</isif>
+				</td>
+				<td class="table_detail middle e s" nowrap="nowrap" width="40%">
+					<isif condition="${!(empty(product.custom.P360Images))}">
+						<table cellpadding="10" cellspacing="0" width="100%">
+							<tr>
+								<td width="100%">
+									<isscript>
+										if(product.custom.P360Images){
+											parsedP360Images = JSON.parse(product.custom.P360Images);
+										} else {
+											parsedP360Images = {};
+										}
+									</isscript>
+									<isif condition="${parsedP360Images['p360'] && parsedP360Images['p360'].length > 1}">
+										<span class="productType">P360 Images: ${parsedP360Images['p360'].length.toString();}</span>	
+									</isif>
+								</td>
+							</tr>
+						</table>
+					</isif>
+
+				</td>
+				<td class="table_detail middle e s" style="text-align: center;" nowrap="nowrap" width="15%">
+					<span class="productType">${Helper.getProductType(product)}</span>	
+				</td>
+				<td class="table_detail middle e s" style="text-align: center;" nowrap="nowrap" width="25%">
+					<a
+					href="${URLUtils.url('P360-addImages','getVariantsOf',pdict.getVariantsOf,'productID',product.ID, 'localeSelected',pdict.localeSelected, 'productType', Helper.getAssignProductType(product), 'prev_page', prev_page)}"
+					class="table_detail_link">
+					<isscript>
+						if(product.custom.P360Images){
+							parsedP360Images = JSON.parse(product.custom.P360Images);
+						} else {
+							parsedP360Images = {};
+						}
+					</isscript>
+					<isif condition="${parsedP360Images['p360'] && parsedP360Images['p360'].length > 1}"> 
+						${Resource.msg('label.p360.addeditimages','p360',null)}
+						<iselse>	
+						${Resource.msg('label.p360.addimages','p360',null)}
+					</isif>	 
+
+				</a>
+				</td>
+			</tr>
+			</isloop>
+		</tbody>
+	</table>
+	<isif condition="${pdict.productType == 'allProducts'}">
+	<table cellpadding="10" cellspacing="0" width="100%">
+			<tr>
+				<td class="bc_table_top_bottom" width = "33%">
+
+					<div class="bc_count">
+						${Resource.msg('label.p360.totalProducts','p360',null)}
+						: ${pdict.count}</div> 
+				</td>
+				<td class="bc_table_top_bottom" style="text-align: center;" width = "33%">
+				<span class="pagecursortxt">
+						
+					<a class="pagecursorbtn perm_not_disabled"
+								href="${dw.web.URLUtils.url('P360-getAllProducts', 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType,'searchParam', pdict.searchParam, 'pageSize', '50', 'prev_page', prev_page)}">50</a>
+				</span>
+				 
+				<span class="pagecursortxt">
+						
+						<a class="pagecursorbtn perm_not_disabled"
+								href="${dw.web.URLUtils.url('P360-getAllProducts', 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType, 'searchParam', pdict.searchParam, 'pageSize', '100', 'prev_page', prev_page)}">100</a>
+						
+				</span> 
+				
+				<span class="pagecursortxt">
+						
+						<a class="pagecursorbtn perm_not_disabled"
+								href="${dw.web.URLUtils.url('P360-getAllProducts', 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType,'searchParam', pdict.searchParam, 'pageSize', '1000', 'prev_page', prev_page)}">1000</a>
+				</span> items
+			</td>
+				<td class="bc_table_top_bottom" width = "34%">
+					<!-- start  --> <isif
+						condition="${pdict.paginationProduct.showPagination}">
+					<div class="im-nav-wrap">
+						<ul class="im-nav">
+							<isif condition="${pdict.paginationProduct.showPrev}">
+							<li class="im-nav__item"><a class="button"
+								href="${dw.web.URLUtils.url('P360-getAllProducts','getVariantsOf',pdict.getVariantsOf, 'actualPageProducts', (pdict.paginationProduct.actualPageProducts - 1), 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType, 'searchParam', pdict.searchParam, 'pageSize', pdict.pageSize, 'prev_page', prev_page)}">${Resource.msg('label.p360.previous','p360',null)}</a></li>
+							</isif>
+							<isif condition="${pdict.paginationProduct.useDots}"> <isloop
+								items="${(pdict.paginationProduct.listOfPages)}" var="pageNumber">
+							<isif condition="${pdict.paginationProduct.actualPageProducts == pageNumber}">
+							<li class='im-nav__item'><span class="button">${pageNumber.toString()}</span></li>
+							<iselseif condition="${pageNumber == 'dots'}">
+							<li class='im-nav__item'>...</li>
+							<iselse>
+							<li class='im-nav__item'><a class="button"
+								href="${dw.web.URLUtils.url('P360-getAllProducts','getVariantsOf',pdict.getVariantsOf,'getSubOf', pdict.getSubOf, 'actualPageProducts', pageNumber.toString(), 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID, 'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType,'searchParam', pdict.searchParam,'pageSize', pdict.pageSize, 'prev_page', prev_page)}">${pageNumber.toString()}</a></li></isif>
+							</isloop> <iselse> <isloop status="i" begin="1"
+								end="${(pdict.paginationProduct.numberOfPages)*1}"> <isif
+								condition="${pdict.paginationProduct.actualPageProducts == i.index}">
+							<li class='im-nav__item'><span class="button">${i.index}</span></li>
+							<iselse>
+							<li class='im-nav__item'><a class="button"
+								href="${dw.web.URLUtils.url('P360-getAllProducts','getVariantsOf',pdict.getVariantsOf,'getSubOf', pdict.getSubOf, 'actualPageProducts', i.index, 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID, 'localeSelected', pdict.localeSelected, 'productType',pdict.productType,'pageSize', 'searchParam', pdict.searchParam, pdict.pageSize, 'prev_page', prev_page)}">${i.index}</a></li></isif>
+							</isloop></isif>
+
+							<isif condition="${pdict.paginationProduct.showNext}">
+							<li class="im-nav__item"><a class="button"
+								href="${dw.web.URLUtils.url('P360-getAllProducts','getVariantsOf',pdict.getVariantsOf,'getSubOf', pdict.getSubOf, 'actualPageProducts', (pdict.paginationProduct.actualPageProducts + 1), 'search', (pdict.CurrentHttpParameterMap.search.stringValue || ''), 'productID', pdict.productID,'categoryID', pdict.categoryID,'localeSelected', pdict.localeSelected, 'productType',pdict.productType,'pageSize', 'searchParam', pdict.searchParam, pdict.pageSize, 'prev_page', prev_page)}">${Resource.msg('label.p360.next','p360',null)}</a></li>
+							</isif>
+						</ul>
+					</div>
+					</isif> <!--  end  -->
+				</td>
+			</tr>
+		</table>
+		</isif>
+</div>
+
+<script src="${URLUtils.absStatic('/js/getproducts.js')}"
+	type="text/javascript"></script> </isdecorate>

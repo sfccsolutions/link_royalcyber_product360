@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata
+	xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+	<type-extension type-id="Product">
+		<custom-attribute-definitions>
+			<attribute-definition
+				attribute-id="P360Images">
+				<display-name xml:lang="x-default">P360 Images
+				</display-name>
+				<description xml:lang="x-default">360 Images for products</description>
+				<type>text</type>
+				<localizable-flag>true</localizable-flag>
+				<site-specific-flag>false</site-specific-flag>
+				<mandatory-flag>false</mandatory-flag>
+				<visible-flag>false</visible-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<order-required-flag>false</order-required-flag>
+				<externally-defined-flag>false</externally-defined-flag>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360Publish">
+				<display-name xml:lang="x-default">P360 Publish</display-name>
+				<description xml:lang="x-default">Publish or Unpublish P360 Images</description>
+				<type>boolean</type>
+				<mandatory-flag>true</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360AutoRotateIntervalProduct">
+				<display-name xml:lang="x-default">P360 Auto Rotate Interval
+				</display-name>
+				<description xml:lang="x-default">P360 Auto Rotate Interval
+				</description>
+				<type>string</type>
+				<mandatory-flag>true</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+			</attribute-definition>
+		</custom-attribute-definitions>
+		<group-definitions>
+			<attribute-group group-id="P360">
+				<display-name xml:lang="x-default">P360</display-name>
+				<attribute attribute-id="P360Images" />
+				<attribute attribute-id="P360Publish" />
+				<attribute attribute-id="P360AutoRotateIntervalProduct"/>
+			</attribute-group>
+		</group-definitions>
+	</type-extension>
+	<type-extension type-id="SitePreferences">
+		<custom-attribute-definitions>
+			<attribute-definition
+				attribute-id="P360Enabled">
+				<display-name xml:lang="x-default">P360 Enable</display-name>
+				<description xml:lang="x-default">Enable or disable the P360
+					cartridge</description>
+				<type>boolean</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>true</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360FolderName">
+				<display-name xml:lang="x-default">Folder Name</display-name>
+				<description xml:lang="x-default">Parent Folder Name where all 360 media files
+					should be uploaded</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>true</externally-managed-flag>
+				<default-value>P360_Folder</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360MasterViewType">
+				<display-name xml:lang="x-default">Master Image View Type</display-name>
+				<description xml:lang="x-default">Master Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360VariantViewType">
+				<display-name xml:lang="x-default">Variant Image View Type</display-name>
+				<description xml:lang="x-default">Variant Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360StandardViewType">
+				<display-name xml:lang="x-default">Standard Image View Type</display-name>
+				<description xml:lang="x-default">Standard Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360ProductSetViewType">
+				<display-name xml:lang="x-default">Product Set Image View Type</display-name>
+				<description xml:lang="x-default">Product Set Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360ProductBundleViewType">
+				<display-name xml:lang="x-default">Product Bundle Image View Type</display-name>
+				<description xml:lang="x-default">Product Bundle Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360VariationGroupViewType">
+				<display-name xml:lang="x-default">Variation Group Image View Type</display-name>
+				<description xml:lang="x-default">Variation Group Image View Type</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>small</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360ZoomPower">
+				<display-name xml:lang="x-default">P360 Zoom Power
+				</display-name>
+				<description xml:lang="x-default">P360 Zoom Power
+				</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>2</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360ZoomRadius">
+				<display-name xml:lang="x-default">P360 Zoom Radius
+				</display-name>
+				<description xml:lang="x-default">P360 Zoom Radius
+				</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>100</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360AutoRotateInterval">
+				<display-name xml:lang="x-default">P360 Auto Rotate Interval
+				</display-name>
+				<description xml:lang="x-default">P360 Auto Rotate Interval
+				</description>
+				<type>string</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>150</default-value>
+			</attribute-definition>
+			<attribute-definition
+				attribute-id="P360AutoRotate">
+				<display-name xml:lang="x-default">P360 Auto Rotate</display-name>
+				<description xml:lang="x-default">Enable or disable the P360
+					Auto Rotate</description>
+				<type>boolean</type>
+				<mandatory-flag>false</mandatory-flag>
+				<externally-managed-flag>false</externally-managed-flag>
+				<default-value>false</default-value>
+			</attribute-definition>
+		</custom-attribute-definitions>
+		<group-definitions>
+			<attribute-group group-id="P360">
+				<display-name xml:lang="x-default">P360</display-name>
+				<attribute attribute-id="P360Enabled" />
+				<attribute attribute-id="P360FolderName" />
+				<attribute attribute-id="P360MasterViewType" />
+				<attribute attribute-id="P360VariantViewType" />
+				<attribute attribute-id="P360StandardViewType" />
+				<attribute attribute-id="P360ProductSetViewType" />
+				<attribute attribute-id="P360ProductBundleViewType" />
+				<attribute attribute-id="P360VariationGroupViewType" />
+				<attribute attribute-id="P360ZoomPower" />
+				<attribute attribute-id="P360ZoomRadius" />
+				<attribute attribute-id="P360AutoRotateInterval" />
+				<attribute attribute-id="P360AutoRotate" />
+			</attribute-group>
+		</group-definitions>
+	</type-extension>
+</metadata>

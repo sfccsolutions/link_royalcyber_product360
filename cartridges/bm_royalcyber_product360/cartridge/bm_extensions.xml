@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
+	<menuitem id="p360-menu-item" site="true">
+    	<name xml:lang="x-default">P360</name>
+    	<short_description xml:lang="x-default">360 Degree view of products.</short_description>
+    	<description xml:lang="x-default">360 Degree view of products.</description>
+    	<icon>images/p360.png</icon>
+    </menuitem>
+	
+	<menuaction id="p360_ImagesAllProducts" menupath="p360-menu-item" position="200" site="true">
+      <name xml:lang="x-default">Add 360 Images</name>
+      <name xml:lang="fr">Add 360 Images</name>
+      <short_description xml:lang="x-default">Add 360 Images to all products</short_description>
+      <short_description xml:lang="fr">Add 360 Images to all products</short_description>
+      <description xml:lang="x-default">
+      	Add 360 Images to all products
+      </description>
+      <description xml:lang="fr">
+      	Add 360 Images to all products
+      </description>
+      <exec pipeline="P360" node="AllProducts"/>
+      <sub-pipelines>
+          <pipeline name="P360" />
+      </sub-pipelines>
+      <icon>images/p360.png</icon>
+    </menuaction>
+</extensions>
